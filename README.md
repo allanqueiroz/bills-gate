@@ -1,5 +1,5 @@
 # Este é um README 😄
 
-## Aqui ainda será alterado..
+### 🚧 Aqui ainda será alterado.. 🚧
 
-![gif-working](https://giphy.com/gifs/5Zesu5VPNGJlm)
+![gif-working](https://c.tenor.com/kSiC-0wGr4kAAAAd/monkey-technology.gif)
