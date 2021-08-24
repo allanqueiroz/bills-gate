@@ -55,7 +55,7 @@ const Create = () => {
       "id",
       JSON.stringify([
         ...dataFromLocal,
-        { tag, ...data, creationDate, totalValue },
+        { tag, data: [...data], creationDate, totalValue },
       ])
     );
     history.push("/");
@@ -105,16 +105,12 @@ const Create = () => {
             {data.length !== 1 ? (
               <button onClick={(e) => handleRemoveItem(e, index)}>-</button>
             ) : null}
-            {/* {data.length - 1 === index ? (
-              <button onClick={(e) => handleAddItems(e)}>+</button>
-            ) : null} */}
           </div>
         ))}
         <button disabled>R$</button>
         <input type="text" value={totalValue} disabled />
       </form>
       <button onClick={() => handleSubmit()}>Salvar</button>
-      <p>{JSON.stringify(data)}</p>
     </>
   );
 };

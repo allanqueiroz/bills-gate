@@ -3,6 +3,8 @@ import { useHistory } from "react-router-dom";
 import Container from "@material-ui/core/Container";
 import Button from "@material-ui/core/Button";
 import { makeStyles, styled } from "@material-ui/core/styles";
+import moment from "moment";
+import uniqid from "uniqid";
 
 //hook api
 const styles = makeStyles({
@@ -53,8 +55,25 @@ const Main = () => {
       >
         Novo Item
       </Button>
-      <MyTitleH2>UmNovoBTN</MyTitleH2>
-      <p>{JSON.stringify(dataFromLocal)}</p>
+      {dataFromLocal ? (
+        dataFromLocal.map((item) => (
+          <React.Fragment key={uniqid()}>
+            <h3>
+              {item.tag} - {item.creationDate} = {item.totalValue}
+            </h3>
+            <ul>
+              {item.data.map((list) => (
+                <li key={uniqid()}>
+                  {moment(list.date).format("DD/MM/YYYY")} - {list.description}{" "}
+                  = {list.spended}
+                </li>
+              ))}
+            </ul>
+          </React.Fragment>
+        ))
+      ) : (
+        <h3>Vazio KK</h3>
+      )}
     </Container>
   );
 };
