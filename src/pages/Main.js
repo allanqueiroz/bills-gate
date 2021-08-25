@@ -1,6 +1,7 @@
 import React from "react";
 import { useHistory } from "react-router-dom";
 import Container from "@material-ui/core/Container";
+import Card from "@material-ui/core/Card";
 import Button from "@material-ui/core/Button";
 import { makeStyles, styled } from "@material-ui/core/styles";
 import moment from "moment";
@@ -15,6 +16,11 @@ const styles = makeStyles({
     boxShadow: "0 3px 5px 2px rgba(255, 105, 135, .3)",
     color: "white",
     padding: "10px 30px",
+    minHeight: "100vh",
+  },
+  card: {
+    margin: "8px",
+    padding: "0 10px",
   },
 });
 //styled component api
@@ -45,7 +51,7 @@ const Main = () => {
   return (
     <Container maxWidth="md" className={classes.raiz}>
       <h1>Main Page </h1>
-      <h2>Cline no btn abaixo para adicionar um novo item</h2>
+      <h3>E então, que tal adicionar suas dívidas? 🤭</h3>
       <Button
         variant="contained"
         color="secondary"
@@ -57,19 +63,22 @@ const Main = () => {
       </Button>
       {dataFromLocal ? (
         dataFromLocal.map((item) => (
-          <React.Fragment key={uniqid()}>
+          <Card key={uniqid()} className={classes.card}>
             <h3>
-              {item.tag} - {item.creationDate} = {item.totalValue}
+              {item.tag} - {item.creationDate}
             </h3>
+            <hr />
             <ul>
               {item.data.map((list) => (
                 <li key={uniqid()}>
-                  {moment(list.date).format("DD/MM/YYYY")} - {list.description}{" "}
-                  = {list.spended}
+                  {moment(list.date).format("DD/MM/YYYY")} • {list.description}{" "}
+                  = R$ {list.spended}
                 </li>
               ))}
             </ul>
-          </React.Fragment>
+            <hr />
+            <h5>Total gasto R$ {item.totalValue}</h5>
+          </Card>
         ))
       ) : (
         <h3>Vazio KK</h3>
