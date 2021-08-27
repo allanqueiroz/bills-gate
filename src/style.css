@@ -5,3 +5,16 @@ body {
 ul {
   list-style: none;
 }
+
+.div-item {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.div-item button {
+  margin-top: 5px;
+}
+
+.list-items li {
+  padding: 7px;
+}

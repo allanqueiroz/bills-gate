@@ -1,6 +1,7 @@
 import React from "react";
 import { useHistory } from "react-router";
 import moment from "moment";
+import uniqid from "uniqid";
 
 const Create = () => {
   React.useEffect(() => {
@@ -35,7 +36,7 @@ const Create = () => {
       if (value === "") {
         value = 0;
       }
-      setTotalValue((prev) => prev + parseInt(value));
+      setTotalValue((prev) => prev + parseFloat(value));
     }
   };
   const handleAddItems = (event) => {
@@ -55,7 +56,7 @@ const Create = () => {
       "id",
       JSON.stringify([
         ...dataFromLocal,
-        { tag, data: [...data], creationDate, totalValue },
+        { tag, data: [...data], creationDate, totalValue, idItem: uniqid() },
       ])
     );
     history.push("/");
@@ -64,7 +65,7 @@ const Create = () => {
   return (
     <>
       <h1>Create Page</h1>
-      <button onClick={handleClick}>Voltar p main page</button>
+
       <form>
         <input
           type="text"
@@ -111,6 +112,7 @@ const Create = () => {
         <input type="text" value={totalValue} disabled />
       </form>
       <button onClick={() => handleSubmit()}>Salvar</button>
+      <button onClick={handleClick}>Cancelar</button>
     </>
   );
 };

@@ -3,6 +3,7 @@ import { useHistory } from "react-router-dom";
 import Container from "@material-ui/core/Container";
 import Card from "@material-ui/core/Card";
 import Button from "@material-ui/core/Button";
+import DeleteForeverSharpIcon from "@material-ui/icons/DeleteForeverSharp";
 import { makeStyles, styled } from "@material-ui/core/styles";
 import moment from "moment";
 import uniqid from "uniqid";
@@ -43,6 +44,13 @@ const Main = () => {
   const handleClick = () => {
     history.push("/Create");
   };
+  const handleDeleteItem = (i) => {
+    const newValue = [...dataFromLocal];
+    newValue.splice(i, 1);
+
+    setDataFromLocal(newValue);
+    localStorage.setItem("id", JSON.stringify(newValue));
+  };
 
   React.useEffect(() => {
     setDataFromLocal(JSON.parse(localStorage.getItem("id")));
@@ -62,13 +70,19 @@ const Main = () => {
         Novo Item
       </Button>
       {dataFromLocal ? (
-        dataFromLocal.map((item) => (
-          <Card key={uniqid()} className={classes.card}>
-            <h3>
-              {item.tag} - {item.creationDate}
-            </h3>
+        dataFromLocal.map((item, index) => (
+          <Card className={classes.card} key={item.idItem}>
+            <div className="div-item">
+              <h3>
+                {item.tag} - {item.creationDate}
+              </h3>
+              <Button onClick={() => handleDeleteItem(index)} className="div-">
+                <DeleteForeverSharpIcon />
+              </Button>
+            </div>
+
             <hr />
-            <ul>
+            <ul className="list-items">
               {item.data.map((list) => (
                 <li key={uniqid()}>
                   {moment(list.date).format("DD/MM/YYYY")} • {list.description}{" "}
@@ -77,7 +91,9 @@ const Main = () => {
               ))}
             </ul>
             <hr />
-            <h5>Total gasto R$ {item.totalValue}</h5>
+            <h4>
+              Total gasto R$ {item.totalValue.toFixed(2).replace(".", ",")}
+            </h4>
           </Card>
         ))
       ) : (
