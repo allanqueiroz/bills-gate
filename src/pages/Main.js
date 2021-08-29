@@ -3,6 +3,7 @@ import { useHistory } from "react-router-dom";
 import Container from "@material-ui/core/Container";
 import Card from "@material-ui/core/Card";
 import Button from "@material-ui/core/Button";
+import Zoom from "@material-ui/core/Zoom";
 import DeleteForeverSharpIcon from "@material-ui/icons/DeleteForeverSharp";
 import { makeStyles, styled } from "@material-ui/core/styles";
 import moment from "moment";
@@ -20,7 +21,7 @@ const styles = makeStyles({
     minHeight: "100vh",
   },
   card: {
-    margin: "8px",
+    margin: "15px",
     padding: "0 10px",
   },
 });
@@ -40,6 +41,7 @@ const Main = () => {
   const classes = styles();
   const history = useHistory();
   const [dataFromLocal, setDataFromLocal] = React.useState([]);
+  const [triggerValue, setTriggerValue] = React.useState(false);
 
   const handleClick = () => {
     history.push("/Create");
@@ -47,18 +49,18 @@ const Main = () => {
   const handleDeleteItem = (i) => {
     const newValue = [...dataFromLocal];
     newValue.splice(i, 1);
-
     setDataFromLocal(newValue);
     localStorage.setItem("id", JSON.stringify(newValue));
   };
 
   React.useEffect(() => {
     setDataFromLocal(JSON.parse(localStorage.getItem("id")));
+    setTriggerValue(true);
   }, []);
 
   return (
-    <Container maxWidth="md" className={classes.raiz}>
-      <h1>Main Page </h1>
+    <Container maxWidth="lg" className={classes.raiz}>
+      <span className="big-size-h1">BILLS GATES </span>
       <h3>E então, que tal adicionar suas dívidas? 🤭</h3>
       <Button
         variant="contained"
@@ -71,30 +73,32 @@ const Main = () => {
       </Button>
       {dataFromLocal ? (
         dataFromLocal.map((item, index) => (
-          <Card className={classes.card} key={item.idItem}>
-            <div className="div-item">
-              <h3>
-                {item.tag} - {item.creationDate}
-              </h3>
-              <Button onClick={() => handleDeleteItem(index)} className="div-">
-                <DeleteForeverSharpIcon />
-              </Button>
-            </div>
+          <Zoom in={triggerValue} timeout={1000} key={item.idItem}>
+            <Card className={classes.card}>
+              <div className="div-item">
+                <h3>
+                  {item.tag} - {item.creationDate}
+                </h3>
+                <Button onClick={() => handleDeleteItem(index)}>
+                  <DeleteForeverSharpIcon />
+                </Button>
+              </div>
 
-            <hr />
-            <ul className="list-items">
-              {item.data.map((list) => (
-                <li key={uniqid()}>
-                  {moment(list.date).format("DD/MM/YYYY")} • {list.description}{" "}
-                  = R$ {list.spended}
-                </li>
-              ))}
-            </ul>
-            <hr />
-            <h4>
-              Total gasto R$ {item.totalValue.toFixed(2).replace(".", ",")}
-            </h4>
-          </Card>
+              <hr />
+              <ul className="list-items">
+                {item.data.map((list) => (
+                  <li key={uniqid()}>
+                    {moment(list.date).format("DD/MM/YYYY")} •{" "}
+                    {list.description} = R$ {list.spended}
+                  </li>
+                ))}
+              </ul>
+              <hr />
+              <h4>
+                Total gasto R$ {item.totalValue.toFixed(2).replace(".", ",")}
+              </h4>
+            </Card>
+          </Zoom>
         ))
       ) : (
         <h3>Vazio KK</h3>
