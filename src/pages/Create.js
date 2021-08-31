@@ -1,7 +1,25 @@
 import React from "react";
 import { useHistory } from "react-router";
+import Container from "@material-ui/core/Container";
+import { makeStyles } from "@material-ui/core/styles";
+import Button from "@material-ui/core/Button";
+import TextField from "@material-ui/core/TextField";
+import AddCircleOutlineSharpIcon from "@material-ui/icons/AddCircleOutlineSharp";
+import RemoveSharpIcon from "@material-ui/icons/RemoveSharp";
 import moment from "moment";
 import uniqid from "uniqid";
+
+const styles = makeStyles({
+  raiz: {
+    background: "linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)",
+    border: 0,
+    borderRadius: 3,
+    boxShadow: "0 3px 5px 2px rgba(255, 105, 135, .3)",
+    color: "white",
+    padding: "10px 30px",
+    minHeight: "100vh",
+  },
+});
 
 const Create = () => {
   React.useEffect(() => {
@@ -10,7 +28,7 @@ const Create = () => {
       setDataFromLocal(d);
     }
   }, []);
-
+  const classesOnCreate = styles();
   const history = useHistory();
   const [dataFromLocal, setDataFromLocal] = React.useState([]);
   const [tag, setTag] = React.useState("");
@@ -19,6 +37,7 @@ const Create = () => {
   ]);
   const [totalValue, setTotalValue] = React.useState(0);
   const [creationDate, setCreationDate] = React.useState("");
+  const [disable, setDisable] = React.useState(true);
 
   const handleClick = () => {
     history.push("/");
@@ -52,68 +71,95 @@ const Create = () => {
     setData(newValue);
   };
   const handleSubmit = () => {
-    localStorage.setItem(
-      "id",
-      JSON.stringify([
-        ...dataFromLocal,
-        { tag, data: [...data], creationDate, totalValue, idItem: uniqid() },
-      ])
-    );
-    history.push("/");
+    if (totalValue) {
+      localStorage.setItem(
+        "id",
+        JSON.stringify([
+          ...dataFromLocal,
+          { tag, data: [...data], creationDate, totalValue, idItem: uniqid() },
+        ])
+      );
+      history.push("/");
+    }
   };
 
   return (
-    <>
+    <Container className={classesOnCreate.raiz}>
       <h1>Create Page</h1>
-
       <form>
-        <input
+        <TextField
           type="text"
           name="name"
           value={tag}
           onChange={(e) => setTag(e.target.value)}
-          placeholder="Nome da lista"
-          required
+          label="Nome da lista"
+          variant="filled"
+          fullWidth={true}
+          onBlur={() => (tag ? setDisable(false) : setDisable(true))}
         />
-        <button onClick={(e) => handleAddItems(e)}>+</button>
+        <Button
+          variant="contained"
+          color="secondary"
+          onClick={(e) => handleAddItems(e)}
+        >
+          <AddCircleOutlineSharpIcon />
+        </Button>
         {data.map((item, index) => (
           <div key={index}>
-            <input
+            <TextField
               type="text"
               name="description"
               value={item.description}
               onChange={(e) => handleDataChange(e, index)}
               placeholder="Descrição"
-              required
+              variant="filled"
+              disabled={disable}
             />
-            <input
+            <TextField
               type="number"
               name="spended"
               value={item.spended}
               onChange={(e) => handleDataChange(e, index)}
               onBlur={(e) => handleTotal(e)}
               placeholder="Valor (R$)"
-              required
+              variant="filled"
+              disabled={disable}
             />
-            <input
+            <TextField
               type="date"
               name="date"
               value={item.date}
               onChange={(e) => handleDataChange(e, index)}
               max={moment().format("YYYY-MM-DD")}
-              required
+              variant="filled"
+              disabled={disable}
             />
             {data.length !== 1 ? (
-              <button onClick={(e) => handleRemoveItem(e, index)}>-</button>
+              <Button
+                variant="contained"
+                color="secondary"
+                onClick={(e) => handleRemoveItem(e, index)}
+              >
+                <RemoveSharpIcon />
+              </Button>
             ) : null}
           </div>
         ))}
-        <button disabled>R$</button>
-        <input type="text" value={totalValue} disabled />
       </form>
-      <button onClick={() => handleSubmit()}>Salvar</button>
-      <button onClick={handleClick}>Cancelar</button>
-    </>
+      <TextField disabled value="TOTAL-R$" />
+      <TextField type="text" value={totalValue} disabled />
+      <Button
+        variant="contained"
+        color="secondary"
+        onClick={() => handleSubmit()}
+        disabled={disable}
+      >
+        Salvar
+      </Button>
+      <Button variant="contained" color="secondary" onClick={handleClick}>
+        Cancelar
+      </Button>
+    </Container>
   );
 };
 export default Create;
