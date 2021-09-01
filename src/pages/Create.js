@@ -5,6 +5,9 @@ import { makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import AddCircleOutlineSharpIcon from "@material-ui/icons/AddCircleOutlineSharp";
+import AccountBalanceIcon from "@material-ui/icons/AccountBalance";
+import PaymentIcon from "@material-ui/icons/Payment";
+import MonetizationOnIcon from "@material-ui/icons/MonetizationOn";
 import RemoveSharpIcon from "@material-ui/icons/RemoveSharp";
 import moment from "moment";
 import uniqid from "uniqid";
@@ -18,6 +21,19 @@ const styles = makeStyles({
     color: "white",
     padding: "10px 30px",
     minHeight: "100vh",
+  },
+  forIcon: {
+    fontSize: 50,
+    marginRight: 100,
+  },
+  inputs: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-evenly",
+    margin: 10,
+  },
+  inputWidth: {
+    width: "60%",
   },
 });
 
@@ -85,27 +101,40 @@ const Create = () => {
 
   return (
     <Container className={classesOnCreate.raiz}>
-      <h1>Create Page</h1>
+      <AccountBalanceIcon className={classesOnCreate.forIcon} />
+      <MonetizationOnIcon className={classesOnCreate.forIcon} />
+      <PaymentIcon className={classesOnCreate.forIcon} />
+      <AccountBalanceIcon className={classesOnCreate.forIcon} />
+      <MonetizationOnIcon className={classesOnCreate.forIcon} />
+      <PaymentIcon className={classesOnCreate.forIcon} />
+      <AccountBalanceIcon className={classesOnCreate.forIcon} />
+      <MonetizationOnIcon className={classesOnCreate.forIcon} />
+      <h2 style={{ letterSpacing: 1.4 }}>
+        Vai lá, vamos ver quanto você gastou 🤐🤑
+      </h2>
       <form>
-        <TextField
-          type="text"
-          name="name"
-          value={tag}
-          onChange={(e) => setTag(e.target.value)}
-          label="Nome da lista"
-          variant="filled"
-          fullWidth={true}
-          onBlur={() => (tag ? setDisable(false) : setDisable(true))}
-        />
-        <Button
-          variant="contained"
-          color="secondary"
-          onClick={(e) => handleAddItems(e)}
-        >
-          <AddCircleOutlineSharpIcon />
-        </Button>
+        <div className="tag-and-btn">
+          <TextField
+            type="text"
+            name="name"
+            value={tag}
+            onChange={(e) => setTag(e.target.value)}
+            label="Nome da lista"
+            variant="filled"
+            onBlur={() => (tag ? setDisable(false) : setDisable(true))}
+          />
+          <Button
+            variant="contained"
+            color="secondary"
+            onClick={(e) => handleAddItems(e)}
+          >
+            <AddCircleOutlineSharpIcon />
+            Nova linha
+          </Button>
+        </div>
+
         {data.map((item, index) => (
-          <div key={index}>
+          <div key={index} className={classesOnCreate.inputs}>
             <TextField
               type="text"
               name="description"
@@ -114,6 +143,7 @@ const Create = () => {
               placeholder="Descrição"
               variant="filled"
               disabled={disable}
+              className={classesOnCreate.inputWidth}
             />
             <TextField
               type="number"
@@ -146,19 +176,22 @@ const Create = () => {
           </div>
         ))}
       </form>
-      <TextField disabled value="TOTAL-R$" />
+      <hr />
+      <TextField disabled value="TOTAL R$" />
       <TextField type="text" value={totalValue} disabled />
-      <Button
-        variant="contained"
-        color="secondary"
-        onClick={() => handleSubmit()}
-        disabled={disable}
-      >
-        Salvar
-      </Button>
-      <Button variant="contained" color="secondary" onClick={handleClick}>
-        Cancelar
-      </Button>
+      <div className={classesOnCreate.inputs}>
+        <Button
+          variant="contained"
+          color="secondary"
+          onClick={() => handleSubmit()}
+          disabled={disable}
+        >
+          Salvar
+        </Button>
+        <Button variant="contained" color="secondary" onClick={handleClick}>
+          Cancelar
+        </Button>
+      </div>
     </Container>
   );
 };

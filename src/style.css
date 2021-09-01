@@ -24,3 +24,12 @@ ul {
 .list-items li {
   padding: 7px;
 }
+
+.tag-and-btn {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 30px;
+}
+.tag-and-btn button {
+  font-weight: bolder;
+}
